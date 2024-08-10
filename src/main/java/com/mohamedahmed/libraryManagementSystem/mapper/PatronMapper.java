@@ -4,9 +4,7 @@ import com.mohamedahmed.libraryManagementSystem.dto.BookDto;
 import com.mohamedahmed.libraryManagementSystem.dto.PatronDto;
 import com.mohamedahmed.libraryManagementSystem.entities.Book;
 import com.mohamedahmed.libraryManagementSystem.entities.Patron;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -20,4 +18,7 @@ public interface  PatronMapper {
     Patron fromPatronDtoToPatron(PatronDto patronDto);
 
     List<PatronDto> fromPatronToPatronDto(List<Patron>patron);
+
+    @Mapping(target = "id", ignore = true)
+    Patron updatePatronFromPatronDto(PatronDto patronDto, @MappingTarget Patron patron);
 }

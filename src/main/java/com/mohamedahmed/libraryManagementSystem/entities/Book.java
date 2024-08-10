@@ -19,7 +19,6 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotBlank(message = "Title cannot be blank")
     private String title;
     @NotBlank(message = "Author cannot be blank")

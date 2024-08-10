@@ -39,9 +39,14 @@ public class Patron {
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Phone number should be valid")
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "patron")
-    private Set<BorrowingRecord> booksBorrowed;
+    @OneToMany
+    @JoinColumn(name = "Patron_id")
+    private Set<BorrowingRecord> borrowingRecordSet;
 
     @NotBlank(message = "Role is required")
     private String role;
+
+    public void addBorrowingRecord(BorrowingRecord borrowingRecord){
+        borrowingRecordSet.add(borrowingRecord);
+    }
 }

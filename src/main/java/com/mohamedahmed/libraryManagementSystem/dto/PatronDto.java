@@ -43,7 +43,7 @@ public class PatronDto {
     private String phoneNumber;
 
 
-    private Set<BorrowingRecord> booksBorrowed;
+    private Set<BorrowingRecord> borrowingRecordSet;
 
     @NotBlank(message = "Role is required")
     private String role;

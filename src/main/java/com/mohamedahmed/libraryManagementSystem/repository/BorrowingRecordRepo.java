@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public interface BorrowingRecordRepo extends JpaRepository<BorrowingRecord,Long> {
+
 }

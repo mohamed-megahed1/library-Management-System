@@ -33,9 +33,9 @@ public class AdminServiceImp implements AdminService {
 
     @Override
     public PatronDto getPatronById(Long id) {
-        Patron book=patronRepo.findById(id).
+        Patron patron=patronRepo.findById(id).
                 orElseThrow(() -> new NotFoundResourceException("This patron With this id : "+id+" is not exists"));
-        return patronMapper.fromPatronToPatronDto(book);
+        return patronMapper.fromPatronToPatronDto(patron);
 
     }
 

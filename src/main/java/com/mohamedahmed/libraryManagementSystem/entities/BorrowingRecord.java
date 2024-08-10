@@ -28,9 +28,9 @@ public class BorrowingRecord {
     private Book book;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "Patron_id", nullable = false)
-    private Patron patron;
+
+    @Column(name = "Patron_id", nullable = false)
+    private Long patronId;
 
     @NotNull
     @PastOrPresent
@@ -43,7 +43,8 @@ public class BorrowingRecord {
     @PastOrPresent
     private LocalDate returnDate;
 
-    @NotBlank
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private BorrowingStatus status;
 
 }

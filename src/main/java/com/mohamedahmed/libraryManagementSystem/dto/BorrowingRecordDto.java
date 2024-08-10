@@ -1,6 +1,12 @@
 package com.mohamedahmed.libraryManagementSystem.dto;
 
 
+import com.mohamedahmed.libraryManagementSystem.entities.Book;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +20,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BorrowingRecordDto {
 
+
     private Long id;
 
-    private BookDto book;
+
+    private Book book;
 
 
-    private PatronDto patron;
+    private Long patronId;
+
 
     private LocalDate borrowDate;
 
     private LocalDate dueDate;
 
-
     private LocalDate returnDate;
-
 
     private String status;
 
