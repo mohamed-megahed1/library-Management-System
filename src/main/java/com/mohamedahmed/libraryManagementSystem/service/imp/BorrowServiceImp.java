@@ -30,10 +30,11 @@ public class BorrowServiceImp implements BorrowService {
 
     private final BorrowingRecordMapper borrowingRecordMapper;
     private final BorrowingRecordRepo borrowingRecordRepo;
-    private final BookMapper bookMapper;
+
     private final BookRepo bookRepo;
-    private final PatronMapper patronMapper;
+
     private final PatronRepo patronRepo;
+
     @Override
     public BorrowingRecordDto borrowBook(Long bookId, Long patronId) {
 
@@ -82,6 +83,7 @@ public class BorrowServiceImp implements BorrowService {
         Patron patron=patronRepo.findById(patronId).
                 orElseThrow(() -> new NotFoundResourceException("This patron With this id : "+patronId+" is not exists"));
         BorrowingRecordDto newRecord=new BorrowingRecordDto();
+        boolean flag=false;
         for (BorrowingRecord record: patron.getBorrowingRecordSet()) {
             //The patron can not borrow the book again in the same day that he is return in
             if (record.getBook().getId()==bookId && record.getPatronId()==patronId){
@@ -94,18 +96,54 @@ public class BorrowServiceImp implements BorrowService {
                     borrowingRecordRepo.save(record);
                     patronRepo.save(patron);
                     newRecord=borrowingRecordMapper.fromBorrowingRecordToBorrowingRecordDto(record);
+                    flag=true;
                     break;
                 }else {
                     throw new ThisEntityAlreadyExistsException("This book already returned.");
                 }
-            }else {
-                throw new NotFoundResourceException("This book id or patron id is not exists on your borrowing records ");
+            }
+        }
+        if (flag==false){
+            throw new NotFoundResourceException("This book id or patron id is not exists on your borrowing records ");
+
+        }
+
+        return newRecord;
+    }
+
+    @Override
+    public String reportLostTheBook(Long bookId, Long patronId) {
+        Book book=bookRepo.findById(bookId).
+                orElseThrow(() -> new NotFoundResourceException("This book With this id : "+bookId+" is not exists"));
+        Patron patron=patronRepo.findById(patronId).
+                orElseThrow(() -> new NotFoundResourceException("This patron With this id : "+patronId+" is not exists"));
+        boolean flag=false;
+        for (BorrowingRecord record: patron.getBorrowingRecordSet()) {
+            //The patron can not borrow the book again in the same day that he is return in
+            if (record.getBook().getId()==bookId && record.getPatronId()==patronId){
+                if (record.getStatus().equals(BorrowingStatus.BORROWED)||
+                        record.getStatus().equals(BorrowingStatus.OVERDUE)){
+                    book.setAvailableCopies(book.getAvailableCopies()-1);
+                    book.setTotalCopies(book.getTotalCopies()-1);
+                    record.setStatus(BorrowingStatus.LOST);
+                    record.setReturnDate(LocalDate.now());
+                    bookRepo.save(book);
+                    borrowingRecordRepo.save(record);
+                    patronRepo.save(patron);
+                     flag=true;
+                    break;
+                    }else {
+                    throw new ThisEntityAlreadyExistsException("This book is already returned or lost .");
+                }
+
             }
         }
 
+        if (flag==false){
+            throw new NotFoundResourceException("This book id or patron id is not exists on your borrowing records ");
 
-
-        return newRecord;
+        }
+        return "The repost is sent successfully";
     }
 
 

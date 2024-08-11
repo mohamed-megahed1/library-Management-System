@@ -6,4 +6,6 @@ public interface BorrowService {
 
     BorrowingRecordDto borrowBook(Long bookId,Long patronId);
     BorrowingRecordDto returnBook(Long bookId,Long patronId);
+
+    String reportLostTheBook(Long bookId,Long patronId);
 }

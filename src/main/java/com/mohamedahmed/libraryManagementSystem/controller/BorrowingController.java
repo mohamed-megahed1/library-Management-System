@@ -29,4 +29,10 @@ public class BorrowingController {
         BorrowingRecordDto borrowingRecordDto=borrowService.returnBook(bookId,patronId);
         return new ResponseEntity<>(borrowingRecordDto, HttpStatus.OK);
     }
+    @PostMapping("report/{book_id}/patron/{patron_id}")
+    public ResponseEntity<String>reportBookLost(@PathVariable("book_id") Long bookId,
+                                                        @PathVariable("patron_id") Long patronId){
+        String reported=borrowService.reportLostTheBook(bookId,patronId);
+        return new ResponseEntity<>(reported, HttpStatus.OK);
+    }
 }
