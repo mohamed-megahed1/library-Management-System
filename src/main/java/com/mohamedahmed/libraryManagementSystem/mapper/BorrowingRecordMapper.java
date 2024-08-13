@@ -1,9 +1,7 @@
 package com.mohamedahmed.libraryManagementSystem.mapper;
 
 import com.mohamedahmed.libraryManagementSystem.dto.BorrowingRecordDto;
-import com.mohamedahmed.libraryManagementSystem.dto.PatronDto;
 import com.mohamedahmed.libraryManagementSystem.entities.BorrowingRecord;
-import com.mohamedahmed.libraryManagementSystem.entities.Patron;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
