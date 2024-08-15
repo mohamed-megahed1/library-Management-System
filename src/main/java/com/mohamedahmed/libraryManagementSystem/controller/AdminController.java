@@ -18,13 +18,13 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/patrons")
-    public ResponseEntity<List<PatronDto>> getAllBooks(){
+    public ResponseEntity<List<PatronDto>> getAllPatrons(){
         List<PatronDto>patronDtos=adminService.getAllPatrons();
 
         return new ResponseEntity<>(patronDtos, HttpStatus.OK);
     }
     @GetMapping("/patrons/{id}")
-    public ResponseEntity<PatronDto> getBookById(@PathVariable Long id){
+    public ResponseEntity<PatronDto> getPatronById(@PathVariable Long id){
         PatronDto patronDto=adminService.getPatronById(id);
 
         return new ResponseEntity<>(patronDto,HttpStatus.OK);

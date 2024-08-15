@@ -70,22 +70,39 @@ class BorrowServiceImpTest {
         when(borrowingRecordMapper.fromBorrowingRecordToBorrowingRecordDto(ArgumentMatchers.any(BorrowingRecord.class)))
                 .thenReturn(borrowingRecordDto);
 
-
         BorrowingRecordDto recordDto=borrowServiceImp.borrowBook(1L,1L);
 
         assertNotNull(recordDto);
         assertEquals(borrowingRecordDto,recordDto);
         assertEquals(1,patron.getBorrowingRecordSet().size());
         assertFalse(patron.getBorrowingRecordSet().isEmpty());
-
+        assertTrue(patron.getBorrowingRecordSet().contains(borrowingRecord));
 
     }
 
+    @Test
+    void not_allowed_to_borrow_this_book_BORROWED_STATUS(){
+        when(bookRepo.findById(1L)).thenReturn(Optional.of(book));
+        when(patronRepo.findById(1L)).thenReturn(Optional.of(patron));
+
+        when(borrowingRecordRepo.save(any(BorrowingRecord.class))).thenReturn(borrowingRecord);
+        when(patronRepo.save(any(Patron.class))).thenReturn(patron);
+        when(borrowingRecordMapper.fromBorrowingRecordToBorrowingRecordDto(ArgumentMatchers.any(BorrowingRecord.class)))
+                .thenReturn(borrowingRecordDto);
+
+            RuntimeException exception=assertThrows(RuntimeException.class,
+            () -> borrowServiceImp.borrowBook(1L,1L),
+                    "Expected borrowBook() to throw, but it didn't"
+            )  ;
+
+        assertTrue(exception.getMessage().contains("You are not allowed to borrow this book now"));
+    }
 
     @Test
     void returnBook() {
 
     }
+
 
     @Test
     void reportLostTheBook() {
