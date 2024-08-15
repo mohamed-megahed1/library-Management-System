@@ -8,6 +8,8 @@ import com.mohamedahmed.libraryManagementSystem.mapper.BookMapper;
 import com.mohamedahmed.libraryManagementSystem.repository.BookRepo;
 import com.mohamedahmed.libraryManagementSystem.service.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class BookServiceImp implements BookService {
 
 
     @Override
+    @Cacheable(value ="AllBooks" ,key = "#root.methodName")
     public List<BookDto> getAllBooks() {
         List<Book>books=bookRepo.findAll();
 
@@ -30,6 +33,7 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
+    @Cacheable(value ="BookById" ,key = "#id")
     public BookDto getBookById(Long id) {
       Book book=bookRepo.findById(id).
               orElseThrow(() -> new NotFoundResourceException("This book With this id : "+id+" is not exists"));
@@ -38,6 +42,7 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
+    @CacheEvict(value ={"BookById","AllBooks"} ,key = "#root.methodName",allEntries = true)
     public String addNewBook(BookDto bookDto) {
 
         if(bookRepo.existsByIsbn(bookDto.getIsbn())){
@@ -52,7 +57,7 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-
+    @CacheEvict(value ={"BookById","AllBooks"} ,key = "#root.methodName",allEntries = true)
     public BookDto updateBook(BookDto bookDto, Long id) {
         Book book=bookRepo.findById(id).
                 orElseThrow(() -> new NotFoundResourceException("This book With this id : "+id+" is not exists"));
@@ -63,6 +68,7 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
+    @CacheEvict(value ={"BookById","AllBooks"} ,key = "#root.methodName",allEntries = true)
     public String removeBookById(Long id) {
         if(bookRepo.existsById(id)){
             bookRepo.deleteById(id);

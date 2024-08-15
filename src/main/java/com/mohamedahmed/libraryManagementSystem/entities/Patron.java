@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 @Entity
 @Setter
@@ -41,7 +42,7 @@ public class Patron {
 
     @OneToMany
     @JoinColumn(name = "Patron_id")
-    private Set<BorrowingRecord> borrowingRecordSet;
+    private Set<BorrowingRecord> borrowingRecordSet=new HashSet<>();
 
     @NotBlank(message = "Role is required")
     private String role;

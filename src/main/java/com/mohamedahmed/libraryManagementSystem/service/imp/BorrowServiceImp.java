@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -45,9 +46,9 @@ public class BorrowServiceImp implements BorrowService {
         BorrowingRecord borrowingRecord=new BorrowingRecord();
         //this if to sure that the same person can not borrow the book twice in the same time
         //or if he lost before
-        if (patron.getBorrowingRecordSet().size()>0){
+        if (patron.getBorrowingRecordSet() != null && !patron.getBorrowingRecordSet().isEmpty()){
             for (BorrowingRecord record: patron.getBorrowingRecordSet()) {
-                if (record.getBook().getId()==bookId &&
+                if (Objects.equals(record.getBook().getId(), bookId) &&
                         (record.getStatus().equals(BorrowingStatus.BORROWED) ||
                                 record.getStatus().equals(BorrowingStatus.OVERDUE)||
                                 record.getStatus().equals(BorrowingStatus.LOST))){
@@ -86,7 +87,7 @@ public class BorrowServiceImp implements BorrowService {
         boolean flag=false;
         for (BorrowingRecord record: patron.getBorrowingRecordSet()) {
             //The patron can not borrow the book again in the same day that he is return in
-            if (record.getBook().getId()==bookId && record.getPatronId()==patronId){
+            if (Objects.equals(record.getBook().getId(), bookId) && Objects.equals(record.getPatronId(), patronId)){
                 if (record.getStatus().equals(BorrowingStatus.BORROWED)||record.getStatus().equals(BorrowingStatus.OVERDUE)
                 || record.getReturnDate().isBefore(LocalDate.now())){
                     book.setAvailableCopies(book.getAvailableCopies()+1);
@@ -103,7 +104,7 @@ public class BorrowServiceImp implements BorrowService {
                 }
             }
         }
-        if (flag==false){
+        if (!flag){
             throw new NotFoundResourceException("This book id or patron id is not exists on your borrowing records ");
 
         }
@@ -120,7 +121,7 @@ public class BorrowServiceImp implements BorrowService {
         boolean flag=false;
         for (BorrowingRecord record: patron.getBorrowingRecordSet()) {
             //The patron can not borrow the book again in the same day that he is return in
-            if (record.getBook().getId()==bookId && record.getPatronId()==patronId){
+            if (Objects.equals(record.getBook().getId(), bookId) && Objects.equals(record.getPatronId(), patronId)){
                 if (record.getStatus().equals(BorrowingStatus.BORROWED)||
                         record.getStatus().equals(BorrowingStatus.OVERDUE)){
                     book.setAvailableCopies(book.getAvailableCopies()-1);
@@ -139,7 +140,7 @@ public class BorrowServiceImp implements BorrowService {
             }
         }
 
-        if (flag==false){
+        if (!flag){
             throw new NotFoundResourceException("This book id or patron id is not exists on your borrowing records ");
 
         }

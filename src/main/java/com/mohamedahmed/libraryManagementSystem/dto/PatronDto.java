@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 @Setter
 @Getter
@@ -43,7 +44,7 @@ public class PatronDto {
     private String phoneNumber;
 
 
-    private Set<BorrowingRecord> borrowingRecordSet;
+    private Set<BorrowingRecord> borrowingRecordSet=new HashSet<>();
 
     @NotBlank(message = "Role is required")
     private String role;
