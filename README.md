@@ -9,6 +9,7 @@ Library Management System API using Spring Boot. The system should allow librari
 - patrons can borrow books, rturn it or report about missing it.
 - using aspects to log errors and method execution time.
 - custom exception handling for each eroor .
+- using caching for improve the performance
 
 
   ## Technologies Used
